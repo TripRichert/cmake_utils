@@ -46,7 +46,7 @@ endfunction()
 # head_filename <= filename1 filename2
 # where each filename is a relative path to the fullPathToFile or an absolute path.
 # By dependency, I mean in the sense of using in compilation, not recipe to generate file
-# the list for each head_filename is stored at the file_deps_${hash_head_filename} where
+# the list for each head_filename is stored at the deps_file_${hash_head_filename} where
 # hash_head_filename is the MD5 hash of the full path to the head_filename
 # cmake variables can be referenced in the dependency file by bracketing with @ symbols, like in .in files
 # the full paths to to the filenames are stored in ${${headfile_list}}
