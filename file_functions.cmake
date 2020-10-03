@@ -39,6 +39,17 @@ function(read_filelist filelist fullPathToFile)
   set(${filelist} ${${filelist}} PARENT_SCOPE)
 endfunction()
 
+## add_dependency_tree_file stores set of lists from file
+# \param headfile_list name of variable to store list of fullpath filenames used as heads of lists
+# \param fullPathToFile full path of filename containing lists
+# \description stores set of lists of file dependencies from file with new line separated entries of the format
+# head_filename <= filename1 filename2
+# where each filename is a relative path to the fullPathToFile or an absolute path.
+# By dependency, I mean in the sense of using in compilation, not recipe to generate file
+# the list for each head_filename is stored at the file_deps_${hash_head_filename} where
+# hash_head_filename is the MD5 hash of the full path to the head_filename
+# cmake variables can be referenced in the dependency file by bracketing with @ symbols, like in .in files
+# the full paths to to the filenames are stored in ${${headfile_list}}
 function(add_dependency_tree_file headfile_list fullPathToFile)
   if(NOT EXISTS ${fullPathToFile})
     message(FATAL_ERROR "File ${fullPathToFile} does not exist")
@@ -87,12 +98,20 @@ function(add_dependency_tree_file headfile_list fullPathToFile)
   set(${headfile_list} ${${headfile_list}} PARENT_SCOPE)
 endfunction()
 
+## get_list_from_dependency_tree recursively expands lists created by add_dependency_tree_file to get all "dependencies" of filename
+# \param filelist_varname variablename to append list generated from expanding dependency lists
+# \param filename fullpath name of file head to get list of
+# \description recursively generates a list of all dependencies of filename, as described in files added with add_dependency_tree_file
+# list will include filename
 function(get_list_from_dependency_tree filelist_varname filename)
   if (${filelist_varname} STREQUAL "filelist_varname")
     message(FATAL_ERROR "name conflict at function scope, cannot use filelist_varname")
   endif()
   if (${filelist_varname} STREQUAL "filename")
     message(FATAL_ERROR "name conflict at function scope, cannot use filename for filelist_varname")
+  endif()
+  if (NOT DEFINED ${filelist_varname})
+    set(${filelist_varname} "")
   endif()
   if (NOT ${filename} STREQUAL "")
     set(basecond false)
