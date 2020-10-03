@@ -32,6 +32,6 @@ Arguments
 |
 *output* string filelist:: variable name to use as reference to store list of filenames in
 
-*input* string fullPathToFilename:: name of file containing newline separated list of file names to be stored in filelist.  Paths should be relative to the directory of fullPathToFilename or should be absolute.
+*input* string fullPathToFilename:: name of file containing newline separated list of file names to be stored in filelist.  Paths in this file should be relative to the directory of fullPathToFilename or should be absolute.  Paths in this file can use cmake variables like a .in file does by surrounding the cmake variable with @ symbols
 
 |===
