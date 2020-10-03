@@ -1,4 +1,4 @@
-= util_functions.cmake API Documentation
+= file_functions.cmake API Documentation
 :toc:
 
 == watch
