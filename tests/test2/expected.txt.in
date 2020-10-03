@@ -1,1 +1,1 @@
-@CMAKE_CURRENT_LIST_DIR@/hello.v;@CMAKE_CURRENT_LIST_DIR@/test1/goodbye.v
+@CMAKE_SOURCE_DIR@/hello.v;@CMAKE_SOURCE_DIR@/test1/goodbye.v
