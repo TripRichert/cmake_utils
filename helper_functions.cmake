@@ -7,11 +7,34 @@ function(get_filename_realpath filename_ref stub directory)
   set(${filename_ref} ${fullname} PARENT_SCOPE)
 endfunction()
 
-## substitute_variables substitutes the contents of cmake variables of string
+## substitute_variables_cmake substitutes the contents of cmake variables of string
 # when variable name is contained in string by ${}
 # \param result_varname the variable name to store the resulting string in
 # \param input_string the string to do substitution on
 function(substitute_variables result_varname input_string)
+  set(loopcontinue true)
+  while(loopcontinue)
+    STRING(REGEX MATCH "@[^@]*@" matchstring ${input_string})
+    if(NOT matchstring STREQUAL "")
+      STRING(REGEX REPLACE "@" "" matchstring ${matchstring})
+      STRING(REGEX REPLACE "@" "" matchstring ${matchstring})
+      if (DEFINED ${matchstring})
+	STRING(REGEX REPLACE "@${matchstring}@" ${${matchstring}} input_string ${input_string})
+      else()
+        message(FATAL_ERROR "variable ${matchstring} not found")
+      endif()
+    else()
+      set(loopcontinue false)
+    endif()
+  endwhile()
+  set(${result_varname} ${input_string} PARENT_SCOPE)
+endfunction()
+
+## substitute_variables_cmake substitutes the contents of cmake variables of string
+# when variable name is contained in string by ${}
+# \param result_varname the variable name to store the resulting string in
+# \param input_string the string to do substitution on
+function(substitute_variables_cmake result_varname input_string)
   STRING(REGEX MATCH "\\$\{[^\}]*\{" matchstring ${input_string})
   if(NOT matchstring STREQUAL "")
     message(STATUS "matchstring ${matchstring}")
